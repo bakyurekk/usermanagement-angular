@@ -1,6 +1,7 @@
 export enum AlertifyType{
-    SUCCESS = 'success',
-    ERROR = 'error',
-    INFO = 'info',
-    WARNING = 'warning'
+    SUCCESS = 'Success',
+    ERROR = 'Error',
+    INFO = 'Info',
+    WARNING = 'Warning',
+    SHOW = 'Show'
 }

@@ -4,9 +4,7 @@ import {
   CanActivate,
   Router,
   RouterStateSnapshot,
-  UrlTree,
 } from '@angular/router';
-import { Observable } from 'rxjs';
 import { AlertifyType } from 'src/app/models/enum/AlertifyType.enum';
 import { AlertifyService } from 'src/app/services/alertify.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
@@ -33,7 +31,7 @@ export class AuthenticationGuard implements CanActivate {
     }
     this.router.navigate(['/login'])
     //TODO -  Send notification to user
-    this.alertifyService.error(AlertifyType.ERROR,  'You need to log in to access this page'.toLowerCase());
+    this.alertifyService.error('You need to log in to access this page'.toLowerCase(), AlertifyType.ERROR,  );
     return false;
   }
 }

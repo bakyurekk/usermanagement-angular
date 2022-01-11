@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
   HttpClient,
-  HttpErrorResponse,
   HttpResponse,
 } from '@angular/common/http';
 
@@ -10,34 +9,25 @@ import { Observable } from 'rxjs';
 import { User } from '../models/User';
 
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthenticationService {
   public host = environment.apiUrl;
-  private token: any;
+  private token?: any;
   private loggedInUsername: any;
   private jwtHelper = new JwtHelperService();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router:Router) {}
 
-  public login(user: User): Observable<HttpResponse<any> | HttpErrorResponse> {
-    return this.http.post<HttpResponse<any> | HttpErrorResponse>(
-      ` ${this.host}/user/login`,
-      user,
-      { observe: 'response' }
-    );
+  public login(user: User): Observable<HttpResponse<User>> {
+    return this.http.post<User>(` ${this.host}/user/login`, user, {observe: 'response'});
   }
 
-  public register(
-    user: User
-  ): Observable<HttpResponse<any> | HttpErrorResponse> {
-    return this.http.post<User | HttpErrorResponse>(
-      ` ${this.host}/user/register`,
-      user,
-      { observe: 'response' }
-    )
+  public register(user: User): Observable<User> {
+    return this.http.post<User>(` ${this.host}/user/register`, user);
   }
 
   public logOut(): void {
@@ -46,19 +36,20 @@ export class AuthenticationService {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
     localStorage.removeItem('users');
+    this.router.navigate(['/auth/login'])
   }
 
-  public setToken(token: string): void {
+  public setToken(token: any) {
     this.token = token;
     localStorage.setItem('token', token);
   }
 
-  public setUserToLocalCache(user: string): void {
+  public setUserToLocalCache(user: string) {
     localStorage.setItem('user', JSON.stringify(user));
   }
 
   public getUserFromLocalCache(): any {
-    let userData = localStorage.getItem('users') || '{}'
+    let userData = localStorage.getItem('users') || '{}';
     return JSON.parse(userData);
   }
 
@@ -83,5 +74,4 @@ export class AuthenticationService {
     this.logOut();
     return false;
   }
-
 }

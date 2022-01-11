@@ -1,31 +1,45 @@
- <div class="card">
-     <div class="card-header">
-     </div>
+<div class="card p-5">
+    <div class="card-header text-center">
+        Welcome
+    </div>
     <div class="card-body">
         <h2 class="card-title text-center py-5">
-            Welcome.<br> 
-            User Management System
+            User Management Portal
         </h2>
-      <form>
-          <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Email address</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-          </div>
+        <form [formGroup]="loginForm" (ngSubmit)="login()">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input
+                    [ngClass]="(f['email']?.invalid && (isSubmit  || f['email']?.touched || f['email']?.dirty))?'is-invalid':''"
+                    type="text" formControlName='email' class="form-control" id="email" aria-describedby="email">
+                <div *ngIf="f['email']?.invalid"  class="form-text text-danger">*We'll never share your email
+                    with anyone else.</div>
+            </div>
 
-          <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword1">
-          </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input
+                    [ngClass]="(f['password']?.invalid && (isSubmit  || f['password']?.touched || f['password']?.dirty))?'is-invalid':''"
+                    type="password" formControlName='password' class="form-control" id="password">
+                <div *ngIf="f['password']?.invalid" class="form-text text-danger">*Please enter a password
+                </div>
+            </div>
+            <div class="d-grid gap-2 text-center">
+                <button class="btn btn-primary" type="submit" [disabled]="loginForm.invalid">
+                    <span *ngIf="!loading">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </span>
+                    <span *ngIf="loading">
+                        <i class="fa fa-spinner fa-spin"></i>
+                    </span>
 
-          <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-            <label class="form-check-label" for="exampleCheck1">Check me out</label>
-          </div>
-
+                </button>
+            </div>
         </form>
     </div>
-    <div class="card-footer text-end">
-       <button type="submit" class="btn btn-primary">Login</button>
+    <div class="card-footer text-center">
+        <div id="" class="form-text">Don't have an account
+            <a [routerLink]="['/auth/register']">Sign Up</a>
+        </div>
     </div>
 </div>

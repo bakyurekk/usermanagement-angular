@@ -8,19 +8,22 @@ import { AlertifyType } from '../models/enum/AlertifyType.enum';
 export class AlertifyService {
   constructor(private toastr: ToastrService) {}
 
-  success(type: AlertifyType, message: string) {
-    this.toastr.success(type, message);
+  success( message: string,type: AlertifyType){
+    this.toastr.success( message,type);
   }
 
-  error(type: AlertifyType, message: string) {
-    this.toastr.error(type, message);
+  error(message: string,type: AlertifyType) {
+    this.toastr.error( message, type);
   }
 
-  info(type: AlertifyType, message: string) {
-    this.toastr.info(type, message);
+  info( message: string, type: AlertifyType) {
+    this.toastr.info(message, type);
   }
 
-  warning(type: AlertifyType, message: string) {
-    this.toastr.warning(type, message);
+  warning( message: string, type: AlertifyType) {
+    this.toastr.warning(message, type);
+  }
+  show(message: string, type: AlertifyType){
+    this.toastr.show(message, type)
   }
 }

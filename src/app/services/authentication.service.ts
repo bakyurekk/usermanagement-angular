@@ -36,7 +36,6 @@ export class AuthenticationService {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
     localStorage.removeItem('users');
-    this.router.navigate(['/auth/login'])
   }
 
   public setToken(token: any) {
@@ -44,7 +43,7 @@ export class AuthenticationService {
     localStorage.setItem('token', token);
   }
 
-  public setUserToLocalCache(user: string) {
+  public setUserToLocalCache(user: any) {
     localStorage.setItem('user', JSON.stringify(user));
   }
 
@@ -61,7 +60,7 @@ export class AuthenticationService {
     return this.token;
   }
 
-  public isUserLoggedIn(): boolean {
+  public isUserLoggedIn():boolean {
     this.loadToken();
     if (this.token != null && this.token !== '') {
       if (this.jwtHelper.decodeToken(this.token).sub != null || '') {

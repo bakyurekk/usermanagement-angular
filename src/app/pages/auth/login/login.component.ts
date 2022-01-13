@@ -1,5 +1,5 @@
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -18,38 +18,41 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
+  changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class LoginComponent implements OnInit, OnDestroy {
   public loginForm!: FormGroup;
   public isSubmit: boolean = false;
   public loading: boolean = false;
   public showPassword: boolean = false;
-  private subscriptions:Subscription[] = [];
+  private subscriptions: Subscription[] = [];
 
   constructor(
+    private cdr:ChangeDetectorRef,
     private router: Router,
     private authenticationService: AuthenticationService,
     private alertifyService: AlertifyService,
     private formBuilder: FormBuilder
   ) {
+
+    this.createLoginForm();
   }
 
   ngOnInit(): void {
     if (this.authenticationService.isUserLoggedIn()) {
-      this.router.navigate(['/user/management']);
+      this.router.navigate(['/users/management']);
     } else {
       this.router.navigate(['/auth/login']);
     }
 
-    this.createForm();
   }
 
-
-  createForm() {
+  createLoginForm() {
     this.loginForm = this.formBuilder.group({
-      email: new FormControl('', Validators.compose([Validators.required])),
+      username: new FormControl('', Validators.compose([Validators.required])),
       password: new FormControl('', [Validators.required]),
     });
+    this.cdr.markForCheck();
   }
 
   get f() {
@@ -63,47 +66,41 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
     if (this.loginForm.valid) {
       this.loading = true;
-      let data = Object.assign({}, this.loginForm.value);
+      let userData = Object.assign({}, this.loginForm.value);
 
-      console.log(data);
+      console.log(userData);
 
-      this.authenticationService
-        .login(data)
-        .subscribe({
-          next:(response: HttpResponse<User>) => {
-            const token = response.headers.get(HeaderType.JWT_TOKEN);
-            this.authenticationService.setToken(token);
-            this.authenticationService.setUserToLocalCache(data);
-            this.alertifyService.success(
-              'You have logged in successfully ',
-              AlertifyType.SUCCESS,
+      this.authenticationService.login(userData).subscribe({
+        next: (response: HttpResponse<User>) => {
+          const token = response.headers.get(HeaderType.JWT_TOKEN);
+          this.authenticationService.setToken(token);
+          this.authenticationService.setUserToLocalCache(response.body);
+          this.cdr.markForCheck();
+        },
+        error: (errorResponse: HttpErrorResponse) => {
+          setTimeout(() => {
+            console.log(errorResponse);
+            this.alertifyService.error(
+              errorResponse.error.message,
+              AlertifyType.ERROR
             );
-            this.router.navigate(['/user/management']);
-          },
-          error:(errorResponse:HttpErrorResponse)=>{
-            setTimeout(() => {
-              console.log(errorResponse);
-              this.sendNotificationError(errorResponse.error.message, AlertifyType.ERROR, )
-              this.loading = false;
-              this.isSubmit = false;
-            }, 1000);
-          },
-          complete:()=>console.info('Completed')
+            this.loading = false;
+            this.isSubmit = false;
+          }, 1000);
+        },
+        complete: () => {
+          this.alertifyService.success(
+            'You have logged in successfully ',
+            AlertifyType.SUCCESS
+          ); 
+          console.info('Completed'),
+          this.router.navigate(['/users/management']);
         }
-
-        );
-    }
-  }
-
-  private sendNotificationError(message: string, alertifyType: AlertifyType, ) {
-    if(message){
-      this.alertifyService.error(message, alertifyType);
-    }else{
-      this.alertifyService.error('AN ERROR OCCURED. PLEASE TRY AGEIN',alertifyType);
+      });
     }
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => sub.unsubscribe());
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 }

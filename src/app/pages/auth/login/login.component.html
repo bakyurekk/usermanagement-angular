@@ -8,11 +8,11 @@
         </h2>
         <form [formGroup]="loginForm" (ngSubmit)="login()">
             <div class="mb-3">
-                <label for="email" class="form-label">Email address</label>
+                <label for="email" class="form-label">Username</label>
                 <input
-                    [ngClass]="(f['email']?.invalid && (isSubmit  || f['email']?.touched || f['email']?.dirty))?'is-invalid':''"
-                    type="text" formControlName='email' class="form-control" id="email" aria-describedby="email">
-                <div *ngIf="f['email']?.invalid"  class="form-text text-danger">*We'll never share your email
+                    [ngClass]="(f['username']?.invalid && (isSubmit  || f['username']?.touched || f['username']?.dirty))?'is-invalid':''"
+                    type="text" formControlName='username' class="form-control" id="username" aria-describedby="username">
+                <div *ngIf="f['username']?.invalid" class="form-text text-danger">*We'll never share your username
                     with anyone else.</div>
             </div>
 
@@ -21,8 +21,8 @@
                 <input
                     [ngClass]="(f['password']?.invalid && (isSubmit  || f['password']?.touched || f['password']?.dirty))?'is-invalid':''"
                     type="password" formControlName='password' class="form-control" id="password">
-                <div *ngIf="f['password']?.invalid" class="form-text text-danger">*Please enter a password
-                </div>
+
+                <div *ngIf="f['password']?.invalid" class="form-text text-danger">*Please enter a password</div>
             </div>
             <div class="d-grid gap-2 text-center">
                 <button class="btn btn-primary" type="submit" [disabled]="loginForm.invalid">

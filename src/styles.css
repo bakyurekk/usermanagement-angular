@@ -1,1 +1,10 @@
-@import url('https://use.fontawesome.com/releases/v5.15.4/css/all.css');
+@import url("https://use.fontawesome.com/releases/v5.15.4/css/all.css");
+html,
+body {
+  height: 100%;
+  overflow-x:hidden;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}

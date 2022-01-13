@@ -1,1 +1,61 @@
-<p>register works!</p>
+<div class="card p-5">
+    <div class="card-header text-center">
+        Welcome
+    </div>
+    <div class="card-body">
+        <h2 class="card-title text-center py-5">
+            User Management Portal
+        </h2>
+        <form [formGroup]="registerForm" (ngSubmit)="register()">
+
+
+            <div class="mb-3">
+                <label for="email" class="form-label">Name</label>
+                <input
+                    [ngClass]="(f['lastName']?.invalid && (isSubmit  || f['lastName']?.touched || f['lastName']?.dirty))?'is-invalid':''"
+                    type="text" formControlName='lastName' class="form-control" id="lastName" aria-describedby="lastName">
+                <div *ngIf="f['lastName']?.invalid" class="form-text text-danger"> *** </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label">Surname</label>
+                <input
+                    [ngClass]="(f['firstName']?.invalid && (isSubmit  || f['firstName']?.touched || f['firstName']?.dirty))?'is-invalid':''"
+                    type="text" formControlName='firstName' class="form-control" id="firstName" aria-describedby="firstName">
+                <div *ngIf="f['firstName']?.invalid" class="form-text text-danger"> *** </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label">Username</label>
+                <input
+                    [ngClass]="(f['username']?.invalid && (isSubmit  || f['username']?.touched || f['username']?.dirty))?'is-invalid':''"
+                    type="text" formControlName='username' class="form-control" id="username" aria-describedby="username">
+                <div *ngIf="f['username']?.invalid" class="form-text text-danger"> *** </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input
+                    [ngClass]="(f['email']?.invalid && (isSubmit  || f['email']?.touched || f['email']?.dirty))?'is-invalid':''"
+                    type="text" formControlName='email' class="form-control" id="email" aria-describedby="email">
+                <div *ngIf="f['email']?.invalid" class="form-text text-danger"> *** </div>
+            </div>
+
+            <div class="d-grid gap-2 text-center">
+                <button class="btn btn-primary" type="submit" [disabled]="registerForm.invalid">
+                    <span *ngIf="!loading">
+                        <i class="fas fa-sign-in-alt"></i> Register
+                    </span>
+                    <span *ngIf="loading">
+                        <i class="fa fa-spinner fa-spin"></i>
+                    </span>
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="card-footer text-center">
+        <div id="" class="form-text">Already have an account
+            <a [routerLink]="['/auth/login']">Login</a>
+        </div>
+    </div>
+</div>

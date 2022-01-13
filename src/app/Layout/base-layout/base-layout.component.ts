@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BaseLayoutComponent implements OnInit {
 
+  events: string[] = [];
+  public opened?: boolean;
   constructor() { }
 
   ngOnInit(): void {

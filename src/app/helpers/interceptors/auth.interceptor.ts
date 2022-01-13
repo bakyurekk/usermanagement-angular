@@ -8,6 +8,7 @@ import {
 import { Observable } from 'rxjs';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router } from '@angular/router';
+import { HeaderType } from 'src/app/models/enum/HeaderType.enum';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -18,7 +19,8 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   intercept(httpRequest: HttpRequest<any>, httpHandler: HttpHandler): Observable<HttpEvent<any>> {
-    if (httpRequest.url.includes(`${this.apiUrl}/user/login `)) {
+    let authReq = httpRequest;
+    if (httpRequest.url.includes(`${this.apiUrl}/user/login`)) {
       return httpHandler.handle(httpRequest);
     }
 
@@ -32,9 +34,11 @@ export class AuthInterceptor implements HttpInterceptor {
     this.authenticationService.loadToken();
     
     const token = this.authenticationService.getToken();
-    const request = httpRequest.clone({setHeaders: { Authorization: `Bearer ${token}`}});
+    if(token != null){
+      authReq = httpRequest.clone({headers: httpRequest.headers.set(HeaderType.AUTHORIZATION, 'Bearer' + token)});
+    }
 
-    return httpHandler.handle(request);
-
+    return httpHandler.handle(authReq);
   }
+  
 }

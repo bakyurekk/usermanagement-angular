@@ -16,22 +16,24 @@ export class AuthenticationGuard implements CanActivate {
   constructor(
     private authenticationService: AuthenticationService,
     private router: Router,
-    private alertifyService:AlertifyService
+    private alertifyService: AlertifyService
   ) {}
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): boolean {
-    return this.isUserLoggedIn();
-  }
-
-  private isUserLoggedIn(): boolean {
-    if(this.authenticationService.isUserLoggedIn()){
-      return true;
+    
+    if (!this.authenticationService.isUserLoggedIn()) {
+      this.router.navigate(['/auth/login'], {
+        queryParams: { returnUrl: state.url },
+      });
+      this.alertifyService.error(
+        'You need to log in to access this page'.toLowerCase(),
+        AlertifyType.ERROR
+      );
+      return false;
     }
-    this.router.navigate(['/login'])
-    //TODO -  Send notification to user
-    this.alertifyService.error('You need to log in to access this page'.toLowerCase(), AlertifyType.ERROR,  );
-    return false;
+
+    return true;
   }
 }

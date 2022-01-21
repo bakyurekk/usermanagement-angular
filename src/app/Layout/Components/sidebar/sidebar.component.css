@@ -1,16 +1,14 @@
 .sidebar{
 
     position: fixed;
-    top:55px;
+    top:0;
+    left:0;
     display: flex;
     flex-direction: column;
-    width: 250px;
+    width: 200px;
     height: calc(100vh);
     border:1px solid #f1f1f1f1;
-    margin:1rem 0;
-
-
-    z-index: 20;
+    z-index: 1031;
     overflow: auto;
     transition: all .3s ease;
 }
